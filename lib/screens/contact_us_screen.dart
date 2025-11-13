@@ -12,6 +12,14 @@ class ContactUsScreen extends StatefulWidget {
 }
 
 class _ContactUsScreenState extends State<ContactUsScreen> {
+  // Nature-inspired green color palette
+  static const Color primaryGreen = Color(0xFF2E7D32);
+  static const Color accentGreen = Color(0xFF66BB6A);
+  static const Color darkGreen = Color(0xFF1B5E20);
+  static const Color lightGreen = Color(0xFFA5D6A7);
+  static const Color paleGreen = Color(0xFFE8F5E9);
+  static const Color white = Colors.white;
+
   List<String> attachments = [];
   bool isHTML = false;
   final body = FocusNode();
@@ -25,10 +33,11 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   final _phone = TextEditingController();
   final _bodyController = TextEditingController();
   SingleValueDropDownController _subjectController =
-      SingleValueDropDownController();
+  SingleValueDropDownController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final form = GlobalKey<FormState>();
+
   Future<void> send() async {
     final validate = form.currentState?.validate();
     if (!validate!) {
@@ -49,16 +58,51 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
 
     try {
       await FlutterEmailSender.send(email);
+
+      // Show success message
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        elevation: 3,
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: primaryGreen,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        content: Row(
+          children: [
+            Icon(Icons.check_circle, color: white),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'Message sent successfully!',
+                style: TextStyle(color: white, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+      ));
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        elevation: 1000,
+        elevation: 3,
         behavior: SnackBarBehavior.floating,
-        content: Text(
-          error.toString(),
-          textAlign: TextAlign.center,
+        backgroundColor: Colors.red[700],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        content: Row(
+          children: [
+            Icon(Icons.error_outline, color: white),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                error.toString(),
+                style: TextStyle(color: white),
+              ),
+            ),
+          ],
         ),
       ));
     }
+
     _name.clear();
     _phone.clear();
     _bodyController.clear();
@@ -79,96 +123,198 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
-      body: Padding(
-        padding: const EdgeInsets.all(12),
+      backgroundColor: paleGreen.withOpacity(0.3),
+      body: SafeArea(
         child: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Form(
-            key: form,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          height: constraints.maxHeight * 0.15,
-                          child: TextFormField(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Form(
+                key: form,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    // Header Section
+                    Container(
+                      padding: EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [primaryGreen, darkGreen],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryGreen.withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.mail_outline_rounded,
+                              color: white,
+                              size: 40,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Get in Touch',
+                            style: TextStyle(
+                              color: white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'We\'d love to hear from you about Taiping',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: lightGreen,
+                              fontSize: 14,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 32),
+
+                    // Form Container
+                    Container(
+                      padding: EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name Field
+                          _buildFieldLabel('Your Name', Icons.person_outline),
+                          SizedBox(height: 8),
+                          TextFormField(
                             controller: _name,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: darkGreen,
+                              fontSize: 16,
+                            ),
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (value) {
                               FocusScope.of(context).requestFocus(phone);
                             },
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Valid Name!';
+                                return 'Please enter your name';
                               }
                               return null;
                             },
-                            decoration: InputDecoration(
-                              labelText: 'Name',
-                              labelStyle: TextStyle(color: Colors.black), // optional
-                              border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey), // 👈 when not focused
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 2.0), // 👈 when focused
-                              ),
-                            ),
+                            decoration: _buildInputDecoration('Enter your full name'),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          height: constraints.maxHeight * 0.15,
-                          child: TextFormField(
+                          SizedBox(height: 20),
+
+                          // Phone Field
+                          _buildFieldLabel('Phone Number', Icons.phone_outlined),
+                          SizedBox(height: 8),
+                          TextFormField(
                             focusNode: phone,
                             controller: _phone,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: darkGreen,
+                              fontSize: 16,
+                            ),
                             textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.phone,
                             onFieldSubmitted: (value) {
                               FocusScope.of(context).requestFocus(body);
                             },
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Valid Phone Number!';
+                                return 'Please enter your phone number';
                               }
                               return null;
                             },
-                            decoration: InputDecoration(
-                              labelText: 'Phone',
-                              labelStyle: TextStyle(color: Colors.black), // optional
-                              border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey), // 👈 when not focused
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 2.0), // 👈 when focused
-                              ),
-                            ),
+                            decoration: _buildInputDecoration('e.g., +60 12-345 6789'),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          height: constraints.maxHeight * 0.30,
-                          child: DropDownTextField(
+                          SizedBox(height: 20),
+
+                          // Subject Dropdown
+                          _buildFieldLabel('Subject', Icons.subject_outlined),
+                          SizedBox(height: 8),
+                          DropDownTextField(
                             controller: _subjectController,
                             clearOption: false,
-                            textStyle: TextStyle(color: Colors.black),
+                            textStyle: TextStyle(
+                              color: darkGreen,
+                              fontSize: 16,
+                            ),
                             textFieldDecoration: InputDecoration(
-                              labelText: 'Subject',
-                              labelStyle: TextStyle(color: Colors.black),
-                              border: OutlineInputBorder(),
+                              hintText: 'Select a subject',
+                              hintStyle: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 15,
+                              ),
+                              filled: true,
+                              fillColor: paleGreen.withOpacity(0.3),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey), // 👈 when not focused
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[200]!,
+                                  width: 1,
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue, width: 2.0), // 👈 when focused
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: primaryGreen,
+                                  width: 2,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                  width: 1,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                  width: 2,
+                                ),
                               ),
                             ),
                             dropDownList: const [
@@ -187,69 +333,236 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                               return null;
                             },
                           ),
-                        ),
-                        Container(
-                          height: constraints.maxHeight * 0.20,
-                          child: TextFormField(
+                          SizedBox(height: 20),
+
+                          // Message Field
+                          _buildFieldLabel('Message', Icons.message_outlined),
+                          SizedBox(height: 8),
+                          TextFormField(
                             controller: _bodyController,
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                              color: darkGreen,
+                              fontSize: 16,
+                            ),
                             focusNode: body,
-                            maxLines: 8,
+                            maxLines: 6,
+                            textInputAction: TextInputAction.done,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please Enter Valid Message!';
+                                return 'Please enter your message';
                               }
                               return null;
                             },
                             decoration: InputDecoration(
-                              labelText: 'Message',
-                              labelStyle: TextStyle(color: Colors.black), // optional
-                              border: OutlineInputBorder(),
+                              hintText: 'Tell us what\'s on your mind...',
+                              hintStyle: TextStyle(
+                                color: Colors.grey[400],
+                                fontSize: 15,
+                              ),
+                              filled: true,
+                              fillColor: paleGreen.withOpacity(0.3),
+                              contentPadding: EdgeInsets.all(16),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.grey), // 👈 when not focused
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.orange, width: 2.0), // 👈 when focused
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: MediaQuery.of(context).size.width / 4,
-                          ),
-                          child: PlatformElevatedButton(
-                            padding: EdgeInsets.all(0),
-                            onPressed: () {
-                              send();
-                              SystemChannels.textInput
-                                  .invokeMethod('TextInput.hide');
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                gradient: LinearGradient(
-                                  colors: <Color>[
-                                    Color.fromRGBO(255, 143, 0, 1),
-                                    Color.fromRGBO(255, 143, 0, 0.5),
-                                  ],
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.grey[200]!,
+                                  width: 1,
                                 ),
                               ),
-                              padding: const EdgeInsets.all(12),
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Submit',
-                                style: Theme.of(context).textTheme.bodyLarge,
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: primaryGreen,
+                                  width: 2,
+                                ),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                  width: 1,
+                                ),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide(
+                                  color: Colors.red,
+                                  width: 2,
+                                ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 24),
+
+                    // Submit Button
+                    Container(
+                      height: 56,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [primaryGreen, accentGreen],
+                          begin: Alignment.centerLeft,
+                          end: Alignment.centerRight,
                         ),
-                      ]),
-                );
-              },
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: primaryGreen.withOpacity(0.4),
+                            blurRadius: 12,
+                            offset: Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(16),
+                          onTap: () {
+                            send();
+                            SystemChannels.textInput
+                                .invokeMethod('TextInput.hide');
+                          },
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.send_rounded,
+                                  color: white,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Send Message',
+                                  style: TextStyle(
+                                    color: white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 24),
+
+                    // Contact Info Card
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: lightGreen.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.email_outlined,
+                            color: primaryGreen,
+                            size: 28,
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            'Direct Email',
+                            style: TextStyle(
+                              color: darkGreen,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            'enquiry@bluedale.com.my',
+                            style: TextStyle(
+                              color: primaryGreen,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFieldLabel(String label, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, color: primaryGreen, size: 18),
+        SizedBox(width: 8),
+        Text(
+          label,
+          style: TextStyle(
+            color: darkGreen,
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  InputDecoration _buildInputDecoration(String hint) {
+    return InputDecoration(
+      hintText: hint,
+      hintStyle: TextStyle(
+        color: Colors.grey[400],
+        fontSize: 15,
+      ),
+      filled: true,
+      fillColor: paleGreen.withOpacity(0.3),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 16,
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide.none,
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: Colors.grey[200]!,
+          width: 1,
+        ),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: primaryGreen,
+          width: 2,
+        ),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: Colors.red,
+          width: 1,
+        ),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: BorderSide(
+          color: Colors.red,
+          width: 2,
         ),
       ),
     );

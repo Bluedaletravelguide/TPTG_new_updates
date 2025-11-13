@@ -9,6 +9,14 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 class TaipingHistoryScreen extends StatefulWidget {
   static const routeName = '/taiping_history_screen';
 
+  // Nature-inspired color palette
+  static const Color primaryGreen = Color(0xFF2D5016);
+  static const Color lightGreen = Color(0xFF4A7C29);
+  static const Color accentGreen = Color(0xFF6B9D3A);
+  static const Color softGreen = Color(0xFF8FBC5A);
+  static const Color paleGreen = Color(0xFFE8F5E1);
+  static const Color creamWhite = Color(0xFFFAFDF8);
+
   final String id;
   final String yearright;
   final String yearleft;
@@ -21,20 +29,28 @@ class TaipingHistoryScreen extends StatefulWidget {
 
   const TaipingHistoryScreen(
       {required this.yearleft,
-      required this.yearright,
-      required this.descriptionright,
-      required this.descriptionleft,
-      required this.colorR1,
-      required this.colorR2,
-      required this.colorL1,
-      required this.colorL2,
-      required this.id});
+        required this.yearright,
+        required this.descriptionright,
+        required this.descriptionleft,
+        required this.colorR1,
+        required this.colorR2,
+        required this.colorL1,
+        required this.colorL2,
+        required this.id});
 
   @override
   _TaipingHistoryScreenState createState() => _TaipingHistoryScreenState();
 }
 
 class _TaipingHistoryScreenState extends State<TaipingHistoryScreen> {
+  // Nature-inspired color palette
+  static const Color primaryGreen = Color(0xFF2D5016);
+  static const Color lightGreen = Color(0xFF4A7C29);
+  static const Color accentGreen = Color(0xFF6B9D3A);
+  static const Color softGreen = Color(0xFF8FBC5A);
+  static const Color paleGreen = Color(0xFFE8F5E1);
+  static const Color creamWhite = Color(0xFFFAFDF8);
+
   //late BannerAd _bannerAd;
   //late BanAdsense _banAdsense;
 
@@ -63,274 +79,387 @@ class _TaipingHistoryScreenState extends State<TaipingHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     final routeArgs =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+    ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     final subCategoryTitle = routeArgs['title'];
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text(subCategoryTitle!),
+        title: Text(
+          subCategoryTitle!,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        material: (_, __) => MaterialAppBarData(
+          backgroundColor: primaryGreen,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+        cupertino: (_, __) => CupertinoNavigationBarData(
+          backgroundColor: primaryGreen,
+        ),
       ),
-      backgroundColor: Colors.brown[50],
-      body: SafeArea(
-        child: Material(
-          child: Padding(
-            padding: EdgeInsets.zero,
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.brown[100]!, Colors.yellow[50]!],
-                  begin: Alignment.bottomRight,
-                  end: Alignment.topLeft,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [creamWhite, paleGreen, creamWhite],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.5, 1.0],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              // Decorative header
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                margin: EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [lightGreen.withOpacity(0.15), accentGreen.withOpacity(0.08)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: lightGreen.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.history_edu,
+                      color: accentGreen,
+                      size: 28,
+                    ),
+                    SizedBox(width: 12),
+                    Text(
+                      'Journey Through Time',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: primaryGreen,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: GridView.count(
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 0,
-                  crossAxisCount: 1,
-                  children: TaipingHistoryData.map(
-                    (con) => Container(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: TimelineTile(
+
+              // Timeline content
+              Expanded(
+                child: Material(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: TaipingHistoryData.length,
+                      itemBuilder: (context, index) {
+                        final con = TaipingHistoryData.toList()[index];
+                        return Container(
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  // Left timeline item
+                                  TimelineTile(
                                     alignment: TimelineAlign.center,
+                                    isFirst: index == 0,
+                                    lineXY: 0.5,
+                                    beforeLineStyle: LineStyle(
+                                      color: accentGreen,
+                                      thickness: 3,
+                                    ),
                                     indicatorStyle: IndicatorStyle(
                                       indicatorXY: 0.5,
-                                      height: constraints.maxHeight * 0.13,
-                                      width: constraints.maxWidth * 0.13,
+                                      height: 60,
+                                      width: 60,
                                       padding: const EdgeInsets.all(8),
                                       indicator: Container(
                                         alignment: Alignment.center,
                                         decoration: BoxDecoration(
-                                          color: Color(0xff423E37),
+                                          gradient: LinearGradient(
+                                            colors: [primaryGreen, lightGreen],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
                                           shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: lightGreen.withOpacity(0.4),
+                                              blurRadius: 8,
+                                              offset: Offset(0, 3),
+                                            ),
+                                          ],
                                         ),
                                         child: Text(
                                           con.yearleft,
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ),
                                     ),
-                                    startChild: Container(
-                                      constraints: BoxConstraints(
-                                        minHeight: constraints.minHeight * 0.5,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          colors: <Color>[
-                                            con.colorL1,
-                                            con.colorL2,
-                                          ],
-                                          begin: Alignment.bottomRight,
-                                          end: Alignment.topLeft,
+                                    startChild: Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          minHeight: 100,
                                         ),
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 3,
-                                            blurRadius: 7,
-                                            offset: Offset(0, 3),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(16),
+                                          border: Border.all(
+                                            color: softGreen.withOpacity(0.4),
+                                            width: 2,
                                           ),
-                                        ],
-                                      ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(5),
-                                          child: SingleChildScrollView(
-                                            child: Text(
-                                              con.descriptionleft,
-                                              textAlign: TextAlign.center,
-                                              softWrap: true,
-                                              overflow: TextOverflow.fade,
-                                              style: MediaQuery.of(context)
-                                                          .size
-                                                          .width >
-                                                      500
-                                                  ? Theme.of(context)
-                                                      .textTheme
-                                                      .displayMedium
-                                                  : Theme.of(context)
-                                                      .textTheme
-                                                      .displaySmall,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: lightGreen.withOpacity(0.15),
+                                              spreadRadius: 2,
+                                              blurRadius: 10,
+                                              offset: Offset(-2, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(16),
+                                            child: SingleChildScrollView(
+                                              child: Text(
+                                                con.descriptionleft,
+                                                textAlign: TextAlign.center,
+                                                softWrap: true,
+                                                overflow: TextOverflow.fade,
+                                                style: TextStyle(
+                                                  fontSize: MediaQuery.of(context).size.width > 500 ? 16 : 14,
+                                                  color: primaryGreen,
+                                                  height: 1.5,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                con.id != 'kl10'
-                                    ? Expanded(
-                                        child: TimelineTile(
-                                          alignment: TimelineAlign.center,
-                                          indicatorStyle: IndicatorStyle(
-                                            indicatorXY: 0.5,
-                                            height:
-                                                constraints.maxHeight * 0.13,
-                                            width: constraints.maxWidth * 0.13,
-                                            padding: const EdgeInsets.all(8),
-                                            indicator: Container(
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xffE3B23C),
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Text(
-                                                con.yearright,
-                                              ),
-                                            ),
+
+                                  // Right timeline item
+                                  con.id != 'kl10'
+                                      ? TimelineTile(
+                                    alignment: TimelineAlign.center,
+                                    isLast: index == TaipingHistoryData.length - 1,
+                                    lineXY: 0.5,
+                                    beforeLineStyle: LineStyle(
+                                      color: accentGreen,
+                                      thickness: 3,
+                                    ),
+                                    indicatorStyle: IndicatorStyle(
+                                      indicatorXY: 0.5,
+                                      height: 60,
+                                      width: 60,
+                                      padding: const EdgeInsets.all(8),
+                                      indicator: Container(
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [accentGreen, softGreen],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
                                           ),
-                                          endChild: Container(
-                                            constraints: BoxConstraints(
-                                              minHeight:
-                                                  constraints.minHeight * 0.5,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: accentGreen.withOpacity(0.4),
+                                              blurRadius: 8,
+                                              offset: Offset(0, 3),
                                             ),
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                colors: <Color>[
-                                                  con.colorR1,
-                                                  con.colorR2,
-                                                ],
-                                                begin: Alignment.bottomRight,
-                                                end: Alignment.topLeft,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 3,
-                                                  blurRadius: 7,
-                                                  offset: Offset(0, 3),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Center(
-                                              child: Padding(
-                                                padding: EdgeInsets.all(5),
-                                                child: Text(
-                                                  con.descriptionright,
-                                                  textAlign: TextAlign.center,
-                                                  softWrap: true,
-                                                  overflow: TextOverflow.fade,
-                                                  style: MediaQuery.of(context)
-                                                              .size
-                                                              .width >
-                                                          500
-                                                      ? Theme.of(context)
-                                                          .textTheme
-                                                          .displayMedium
-                                                      : Theme.of(context)
-                                                          .textTheme
-                                                          .displaySmall,
-                                                ),
-                                              ),
-                                            ),
+                                          ],
+                                        ),
+                                        child: Text(
+                                          con.yearright,
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
                                           ),
                                         ),
-                                      )
-                                    : Expanded(
-                                        child: InkWell(
-                                          splashColor: Colors.brown,
-                                          onTap: () => launch(
-                                              'http://www.taipingtheguide.com.my/Taiping%20History.html'),
-                                          child: TimelineTile(
-                                            alignment: TimelineAlign.center,
-                                            indicatorStyle: IndicatorStyle(
-                                              indicatorXY: 0.5,
-                                              height:
-                                                  constraints.maxHeight * 0.13,
-                                              width:
-                                                  constraints.maxWidth * 0.13,
-                                              padding: const EdgeInsets.all(8),
-                                              indicator: Container(
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xffE3B23C),
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                child: Text(
-                                                  con.yearright,
-                                                ),
-                                              ),
+                                      ),
+                                    ),
+                                    endChild: Padding(
+                                      padding: EdgeInsets.all(12),
+                                      child: Container(
+                                        constraints: BoxConstraints(
+                                          minHeight: 100,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.circular(16),
+                                          border: Border.all(
+                                            color: softGreen.withOpacity(0.4),
+                                            width: 2,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: lightGreen.withOpacity(0.15),
+                                              spreadRadius: 2,
+                                              blurRadius: 10,
+                                              offset: Offset(2, 3),
                                             ),
-                                            endChild: Container(
-                                              constraints: BoxConstraints(
-                                                minHeight:
-                                                    constraints.minHeight * 0.5,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  colors: <Color>[
-                                                    con.colorR1,
-                                                    con.colorR2,
-                                                  ],
-                                                  begin: Alignment.bottomRight,
-                                                  end: Alignment.topLeft,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey
-                                                        .withOpacity(0.5),
-                                                    spreadRadius: 3,
-                                                    blurRadius: 7,
-                                                    offset: Offset(0, 3),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Center(
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(5),
-                                                  child: Text(
-                                                    con.descriptionright,
-                                                    textAlign: TextAlign.center,
-                                                    softWrap: true,
-                                                    overflow: TextOverflow.fade,
-                                                    style:
-                                                        MediaQuery.of(context)
-                                                                    .size
-                                                                    .width >
-                                                                500
-                                                            ? Theme.of(context)
-                                                                .textTheme
-                                                                .displayMedium
-                                                            : Theme.of(context)
-                                                                .textTheme
-                                                                .displaySmall,
-                                                  ),
-                                                ),
+                                          ],
+                                        ),
+                                        child: Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(16),
+                                            child: Text(
+                                              con.descriptionright,
+                                              textAlign: TextAlign.center,
+                                              softWrap: true,
+                                              overflow: TextOverflow.fade,
+                                              style: TextStyle(
+                                                fontSize: MediaQuery.of(context).size.width > 500 ? 16 : 14,
+                                                color: primaryGreen,
+                                                height: 1.5,
+                                                fontWeight: FontWeight.w500,
                                               ),
                                             ),
                                           ),
                                         ),
                                       ),
-                              ]);
-                        },
-                      ),
+                                    ),
+                                  )
+                                      : InkWell(
+                                    splashColor: softGreen,
+                                    onTap: () => launch(
+                                        'http://www.taipingtheguide.com.my/Taiping%20History.html'),
+                                    child: TimelineTile(
+                                      alignment: TimelineAlign.center,
+                                      isLast: true,
+                                      lineXY: 0.5,
+                                      beforeLineStyle: LineStyle(
+                                        color: accentGreen,
+                                        thickness: 3,
+                                      ),
+                                      indicatorStyle: IndicatorStyle(
+                                        indicatorXY: 0.5,
+                                        height: 60,
+                                        width: 60,
+                                        padding: const EdgeInsets.all(8),
+                                        indicator: Container(
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [accentGreen, softGreen],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ),
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: accentGreen.withOpacity(0.4),
+                                                blurRadius: 8,
+                                                offset: Offset(0, 3),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            Icons.open_in_new,
+                                            color: Colors.white,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                      endChild: Padding(
+                                        padding: EdgeInsets.all(12),
+                                        child: Container(
+                                          constraints: BoxConstraints(
+                                            minHeight: 100,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                              colors: [
+                                                paleGreen.withOpacity(0.8),
+                                                softGreen.withOpacity(0.3),
+                                              ],
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                            ),
+                                            borderRadius: BorderRadius.circular(16),
+                                            border: Border.all(
+                                              color: accentGreen.withOpacity(0.5),
+                                              width: 2,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: lightGreen.withOpacity(0.2),
+                                                spreadRadius: 2,
+                                                blurRadius: 10,
+                                                offset: Offset(2, 3),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(16),
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.touch_app,
+                                                    color: primaryGreen,
+                                                    size: 32,
+                                                  ),
+                                                  SizedBox(height: 12),
+                                                  Text(
+                                                    con.descriptionright,
+                                                    textAlign: TextAlign.center,
+                                                    softWrap: true,
+                                                    overflow: TextOverflow.fade,
+                                                    style: TextStyle(
+                                                      fontSize: MediaQuery.of(context).size.width > 500 ? 16 : 14,
+                                                      color: primaryGreen,
+                                                      height: 1.5,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
-                  ).toList(),
+                  ),
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
-      // material: (_, __) => MaterialScaffoldData(
-      //   // bottomNavigationBar: Container(
-      //   //   child: AdWidget(ad: _bannerAd),
-      //   //   width: _bannerAd.size.width.toDouble(),
-      //   //   height: _bannerAd.size.height.toDouble(),
-      //   //   alignment: Alignment.center,
-      //   // ),
-      // ),
     );
   }
 }

@@ -2,7 +2,7 @@ name: tptg_v2
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -31,7 +31,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -76,12 +75,10 @@ flutter_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
 
   assets:
     #ebook
@@ -267,23 +264,23 @@ flutter:
     # list giving the asset and other descriptors for the font. For
     # example:
   fonts:
-      - family: Raleway
-        fonts:
-          - asset: assets/fonts/Raleway-Regular.ttf
-          - asset: assets/fonts/Raleway-Bold.ttf
-            weight: 700
-          - asset: assets/fonts/Raleway-Black.ttf
-            weight: 900
+    - family: Raleway
+      fonts:
+        - asset: assets/fonts/Raleway-Regular.ttf
+        - asset: assets/fonts/Raleway-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Raleway-Black.ttf
+          weight: 900
 
-      - family: RobotoCondens
-        fonts:
-          - asset: assets/fonts/RobotoCondensed-Regular.ttf
-          - asset: assets/fonts/RobotoCondensed-Bold.ttf
-            weight: 700
-          - asset: assets/fonts/RobotoCondensed-light.ttf
-            weight: 300
-          - asset: assets/fonts/RobotoCondensed-Italic.ttf
-            style: italic
+    - family: RobotoCondens
+      fonts:
+        - asset: assets/fonts/RobotoCondensed-Regular.ttf
+        - asset: assets/fonts/RobotoCondensed-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/RobotoCondensed-light.ttf
+          weight: 300
+        - asset: assets/fonts/RobotoCondensed-Italic.ttf
+          style: italic
 
   # To add assets to your application, add an assets section, like this:
   # assets:

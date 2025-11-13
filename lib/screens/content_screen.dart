@@ -161,13 +161,6 @@ class _ContentScreenState extends State<ContentScreen> {
       ),
     );
 
-    // ignore: unnecessary_null_comparison
-    // final adPlace = _bannerAd == null
-    //     ? Container(height: 50)
-    //     : Container(
-    //         height: getSmartBannerHeight(context),
-    //         child: AdWidget(ad: _bannerAd),
-    //       );
 
     return Scaffold(
       appBar: createAppBar(contentTitle),
